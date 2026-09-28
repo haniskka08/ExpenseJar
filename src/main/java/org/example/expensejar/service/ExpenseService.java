@@ -33,6 +33,10 @@ public class ExpenseService {
         return expenseRepository.findAll();
     }
 
+    public double getTotalExpense() {
+        return expenseRepository.getTotalExpense();
+    }
+
     public Optional<Expense> getExpenseById(Long id) {
         return expenseRepository.findById(id);
     }

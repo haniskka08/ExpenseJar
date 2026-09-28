@@ -27,6 +27,11 @@ public class ExpenseController {
         return ResponseEntity.ok(expenseService.getAllExpenses());
     }
 
+    @GetMapping("/total")
+    public ResponseEntity<Double> getTotalExpense() {
+        return ResponseEntity.ok(expenseService.getTotalExpense());
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Expense> getExpenseById(@PathVariable Long id) {
         return expenseService.getExpenseById(id)
@@ -47,3 +52,4 @@ public class ExpenseController {
         return ResponseEntity.noContent().build();
     }
 }
+
