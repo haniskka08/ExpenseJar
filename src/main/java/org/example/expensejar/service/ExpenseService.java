@@ -1,9 +1,15 @@
 package org.example.expensejar.service;
 
+import org.example.expensejar.dto.CategorySpendingDTO;
+import org.example.expensejar.dto.MonthlySpendingDTO;
 import org.example.expensejar.entity.Expense;
+import org.example.expensejar.exception.ResourceNotFoundException;
 import org.example.expensejar.repository.ExpenseRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,9 +38,29 @@ public class ExpenseService {
         return expenseRepository.getTotalExpense();
     }
 
+    public List<CategorySpendingDTO> getCurrentMonthSpendingByCategory() {
+        YearMonth currentMonth = YearMonth.now();
+        LocalDate startDate = currentMonth.atDay(1);
+        LocalDate endDate = currentMonth.atEndOfMonth();
+        return expenseRepository.getCurrentMonthSpendingByCategory(startDate, endDate);
+    }
+
+    public List<MonthlySpendingDTO> getMonthlySpendingTrends() {
+        List<Object[]> results = expenseRepository.getMonthlySpendingTrends();
+        List<MonthlySpendingDTO> trends = new ArrayList<>();
+        for (Object[] row : results) {
+            int year = ((Number) row[0]).intValue();
+            int month = ((Number) row[1]).intValue();
+            double total = ((Number) row[2]).doubleValue();
+            String formattedMonth = String.format("%04d-%02d", year, month);
+            trends.add(new MonthlySpendingDTO(formattedMonth, total));
+        }
+        return trends;
+    }
+
     public Expense updateExpense(Long id, Expense expense) {
         Expense existingExpense = expenseRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Expense not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Expense not found"));
 
         existingExpense.setAmount(expense.getAmount());
         existingExpense.setDate(expense.getDate());

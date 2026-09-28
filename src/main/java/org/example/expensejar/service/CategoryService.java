@@ -1,6 +1,7 @@
 package org.example.expensejar.service;
 
 import org.example.expensejar.entity.Category;
+import org.example.expensejar.exception.ResourceNotFoundException;
 import org.example.expensejar.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,7 @@ public class CategoryService {
 
     public Category updateCategory(Long id, Category category) {
         Category existingCategory = categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
         existingCategory.setName(category.getName());
 

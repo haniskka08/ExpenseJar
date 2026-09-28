@@ -1,6 +1,10 @@
 package org.example.expensejar.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 @Entity
 public class Budget {
@@ -9,18 +13,24 @@ public class Budget {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Positive(message = "Amount must be greater than 0")
     private double amount;
 
+    @Min(value = 1, message = "Month must be between 1 and 12")
+    @Max(value = 12, message = "Month must be between 1 and 12")
     private int month;
 
+    @Positive(message = "Year must be a positive value")
     private int year;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
+    @NotNull(message = "Category is required")
     private Category category;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @NotNull(message = "User is required")
     private User user;
 
     public Budget() {

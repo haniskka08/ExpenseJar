@@ -1,6 +1,8 @@
 package org.example.expensejar.controller;
 
 import jakarta.validation.Valid;
+import org.example.expensejar.dto.CategorySpendingDTO;
+import org.example.expensejar.dto.MonthlySpendingDTO;
 import org.example.expensejar.entity.Expense;
 import org.example.expensejar.service.ExpenseService;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +35,16 @@ public class ExpenseController {
         return ResponseEntity.ok(expenseService.getTotalExpense());
     }
 
+    @GetMapping("/current-month/category")
+    public ResponseEntity<List<CategorySpendingDTO>> getCurrentMonthSpendingByCategory() {
+        return ResponseEntity.ok(expenseService.getCurrentMonthSpendingByCategory());
+    }
+
+    @GetMapping("/monthly-trends")
+    public ResponseEntity<List<MonthlySpendingDTO>> getMonthlySpendingTrends() {
+        return ResponseEntity.ok(expenseService.getMonthlySpendingTrends());
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Expense> getExpenseById(@PathVariable Long id) {
         return expenseService.getExpenseById(id)
@@ -53,4 +65,3 @@ public class ExpenseController {
         return ResponseEntity.noContent().build();
     }
 }
-

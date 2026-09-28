@@ -1,6 +1,7 @@
 package org.example.expensejar.service;
 
 import org.example.expensejar.entity.User;
+import org.example.expensejar.exception.ResourceNotFoundException;
 import org.example.expensejar.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,7 @@ public class UserService {
 
     public User updateUser(Long id, User user) {
         User existingUser = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         existingUser.setName(user.getName());
         existingUser.setEmail(user.getEmail());

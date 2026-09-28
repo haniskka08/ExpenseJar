@@ -1,7 +1,11 @@
 package org.example.expensejar.controller;
 
+import jakarta.validation.Valid;
+import org.example.expensejar.dto.BudgetAlertDTO;
+import org.example.expensejar.dto.BudgetUsageDTO;
 import org.example.expensejar.entity.Budget;
 import org.example.expensejar.service.BudgetService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,27 +21,40 @@ public class BudgetController {
     }
 
     @PostMapping
-    public Budget createBudget(@RequestBody Budget budget) {
-        return budgetService.createBudget(budget);
+    public ResponseEntity<Budget> createBudget(@Valid @RequestBody Budget budget) {
+        return ResponseEntity.ok(budgetService.createBudget(budget));
     }
 
     @GetMapping
-    public List<Budget> getAllBudgets() {
-        return budgetService.getAllBudgets();
+    public ResponseEntity<List<Budget>> getAllBudgets() {
+        return ResponseEntity.ok(budgetService.getAllBudgets());
+    }
+
+    @GetMapping("/usage")
+    public ResponseEntity<List<BudgetUsageDTO>> getBudgetUsage() {
+        return ResponseEntity.ok(budgetService.getBudgetUsage());
+    }
+
+    @GetMapping("/alerts")
+    public ResponseEntity<List<BudgetAlertDTO>> getBudgetAlerts() {
+        return ResponseEntity.ok(budgetService.getBudgetAlerts());
     }
 
     @GetMapping("/{id}")
-    public Budget getBudgetById(@PathVariable Long id) {
-        return budgetService.getBudgetById(id).orElse(null);
+    public ResponseEntity<Budget> getBudgetById(@PathVariable Long id) {
+        return budgetService.getBudgetById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public Budget updateBudget(@PathVariable Long id, @RequestBody Budget budget) {
-        return budgetService.updateBudget(id, budget);
+    public ResponseEntity<Budget> updateBudget(@PathVariable Long id, @Valid @RequestBody Budget budget) {
+        return ResponseEntity.ok(budgetService.updateBudget(id, budget));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteBudget(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteBudget(@PathVariable Long id) {
         budgetService.deleteBudget(id);
+        return ResponseEntity.noContent().build();
     }
 }
