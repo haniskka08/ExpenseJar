@@ -28,6 +28,19 @@ public class BudgetService {
         return budgetRepository.findById(id);
     }
 
+    public Budget updateBudget(Long id, Budget budget) {
+        Budget existingBudget = budgetRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Budget not found"));
+
+        existingBudget.setAmount(budget.getAmount());
+        existingBudget.setMonth(budget.getMonth());
+        existingBudget.setYear(budget.getYear());
+        existingBudget.setCategory(budget.getCategory());
+        existingBudget.setUser(budget.getUser());
+
+        return budgetRepository.save(existingBudget);
+    }
+
     public void deleteBudget(Long id) {
         budgetRepository.deleteById(id);
     }

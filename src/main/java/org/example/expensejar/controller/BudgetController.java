@@ -31,6 +31,11 @@ public class BudgetController {
         return budgetService.getBudgetById(id).orElse(null);
     }
 
+    @PutMapping("/{id}")
+    public Budget updateBudget(@PathVariable Long id, @RequestBody Budget budget) {
+        return budgetService.updateBudget(id, budget);
+    }
+
     @DeleteMapping("/{id}")
     public void deleteBudget(@PathVariable Long id) {
         budgetService.deleteBudget(id);

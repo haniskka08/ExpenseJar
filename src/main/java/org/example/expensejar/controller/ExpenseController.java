@@ -34,6 +34,13 @@ public class ExpenseController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Expense> updateExpense(
+            @PathVariable Long id,
+            @RequestBody Expense expense) {
+        return ResponseEntity.ok(expenseService.updateExpense(id, expense));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteExpense(@PathVariable Long id) {
         expenseService.deleteExpense(id);
