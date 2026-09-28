@@ -1,5 +1,6 @@
 package org.example.expensejar.controller;
 
+import jakarta.validation.Valid;
 import org.example.expensejar.entity.Expense;
 import org.example.expensejar.service.ExpenseService;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class ExpenseController {
     }
 
     @PostMapping
-    public ResponseEntity<Expense> createExpense(@RequestBody Expense expense) {
+    public ResponseEntity<Expense> createExpense(@Valid @RequestBody Expense expense) {
         return ResponseEntity.ok(expenseService.createExpense(expense));
     }
 
@@ -42,7 +43,7 @@ public class ExpenseController {
     @PutMapping("/{id}")
     public ResponseEntity<Expense> updateExpense(
             @PathVariable Long id,
-            @RequestBody Expense expense) {
+            @Valid @RequestBody Expense expense) {
         return ResponseEntity.ok(expenseService.updateExpense(id, expense));
     }
 

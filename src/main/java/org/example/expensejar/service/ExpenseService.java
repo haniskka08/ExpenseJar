@@ -1,8 +1,6 @@
 package org.example.expensejar.service;
 
-import org.example.expensejar.entity.Category;
 import org.example.expensejar.entity.Expense;
-import org.example.expensejar.entity.User;
 import org.example.expensejar.repository.ExpenseRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,16 +11,9 @@ import java.util.Optional;
 public class ExpenseService {
 
     private final ExpenseRepository expenseRepository;
-    private final CategoryService categoryService;
-    private final UserService userService;
 
-    public ExpenseService(
-            ExpenseRepository expenseRepository,
-            CategoryService categoryService,
-            UserService userService) {
+    public ExpenseService(ExpenseRepository expenseRepository) {
         this.expenseRepository = expenseRepository;
-        this.categoryService = categoryService;
-        this.userService = userService;
     }
 
     public Expense createExpense(Expense expense) {
@@ -33,12 +24,12 @@ public class ExpenseService {
         return expenseRepository.findAll();
     }
 
-    public double getTotalExpense() {
-        return expenseRepository.getTotalExpense();
-    }
-
     public Optional<Expense> getExpenseById(Long id) {
         return expenseRepository.findById(id);
+    }
+
+    public double getTotalExpense() {
+        return expenseRepository.getTotalExpense();
     }
 
     public Expense updateExpense(Long id, Expense expense) {
@@ -47,17 +38,8 @@ public class ExpenseService {
 
         existingExpense.setAmount(expense.getAmount());
         existingExpense.setDate(expense.getDate());
-
-        Category category = categoryService
-                .getCategoryById(expense.getCategory().getId())
-                .orElseThrow(() -> new RuntimeException("Category not found"));
-
-        User user = userService
-                .getUserById(expense.getUser().getId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        existingExpense.setCategory(category);
-        existingExpense.setUser(user);
+        existingExpense.setCategory(expense.getCategory());
+        existingExpense.setUser(expense.getUser());
 
         return expenseRepository.save(existingExpense);
     }

@@ -1,6 +1,8 @@
 package org.example.expensejar.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 import java.time.LocalDate;
 
@@ -11,16 +13,20 @@ public class Expense {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Positive(message = "Amount must be greater than 0")
     private double amount;
 
+    @NotNull(message = "Date is required")
     private LocalDate date;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
+    @NotNull(message = "Category is required")
     private Category category;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @NotNull(message = "User is required")
     private User user;
 
     public Expense() {
